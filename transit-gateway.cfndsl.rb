@@ -29,10 +29,10 @@ CloudFormation do
     TransitGatewayId Ref(:TransitGateway)
   end
 
-  RAM_ResourceShare(:ResourceShare) do
-    AllowExternalPrincipals true
-    Name Ref(:TransitGatewayName)
-    ResourceArns ([Ref(:TransitGateway)])
-    Principals Ref(:AccountList)
-  end
+  # RAM_ResourceShare(:ResourceShare) do
+  #   AllowExternalPrincipals true
+  #   Name Ref(:TransitGatewayName)
+  #   ResourceArns ([Ref(:TransitGateway)])
+  #   Principals Ref(:AccountList)
+  # end
 end
