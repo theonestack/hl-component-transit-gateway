@@ -5,7 +5,7 @@ CloudFormation do
   tags = []
   default_tags.each do |key, value|
     tags << {Key: key, Value: value}
-  end
+  end unless default_tags.nil?
 
   auto_accept_shared_attachments = external_parameters.fetch('auto_accept_shared_attachments', 'enable')
   default_route_table_association = external_parameters.fetch('default_route_table_association', 'enable')
@@ -27,7 +27,6 @@ CloudFormation do
 
   EC2_TransitGatewayRouteTable(:DefaultRouteTable) do
     TransitGatewayId Ref(:TransitGateway)
-    Tags unless tags.empty?
   end
 
   RAM_ResourceShare(:ResourceShare) do
@@ -35,6 +34,5 @@ CloudFormation do
     Name Ref(:TransitGatewayName)
     ResourceArns ([Ref(:TransitGateway)])
     Principals Ref(:AccountList)
-    Tags unless tags.empty?
   end
 end
