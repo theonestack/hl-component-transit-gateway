@@ -29,10 +29,12 @@ CloudFormation do
     TransitGatewayId Ref(:TransitGateway)
   end
 
-  # RAM_ResourceShare(:ResourceShare) do
-  #   AllowExternalPrincipals true
-  #   Name Ref(:TransitGatewayName)
-  #   ResourceArns ([Ref(:TransitGateway)])
-  #   Principals Ref(:AccountList)
-  # end
+  RAM_ResourceShare(:ResourceShare) do
+    AllowExternalPrincipals true
+    Name Ref(:TransitGatewayName)
+    ResourceArns ([
+      FnSub('arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:transit-gateway/${TransitGateway}')
+    ])
+    Principals Ref(:AccountList)
+  end
 end
