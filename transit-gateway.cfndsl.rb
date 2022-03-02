@@ -1,6 +1,11 @@
 CloudFormation do
 
-  default_tags = external_parameters.fetch(:default_tags, [])
+  default_tags = external_parameters.fetch(:default_tags, {})
+
+  tags = []
+  default_tags.each do |key, value|
+    tags << {Key: key, Value: value}
+  end
 
   auto_accept_shared_attachments = external_parameters.fetch('auto_accept_shared_attachments', 'enable')
   default_route_table_association = external_parameters.fetch('default_route_table_association', 'enable')
@@ -17,12 +22,12 @@ CloudFormation do
     DnsSupport dns_support
     MulticastSupport 'disable'
     VpnEcmpSupport vpn_ecmp_support
-    Tags default_tags
+    Tags tags unless tags.empty?
   end
 
   EC2_TransitGatewayRouteTable(:DefaultRouteTable) do
     TransitGatewayId Ref(:TransitGateway)
-    Tags default_tags
+    Tags unless tags.empty?
   end
 
   RAM_ResourceShare(:ResourceShare) do
@@ -30,6 +35,6 @@ CloudFormation do
     Name Ref(:TransitGatewayName)
     ResourceArns ([Ref(:TransitGateway)])
     Principals Ref(:AccountList)
-    Tags default_tags
+    Tags unless tags.empty?
   end
 end
