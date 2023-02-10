@@ -29,7 +29,7 @@ CloudFormation do
     TransitGatewayId Ref(:TransitGateway)
   end
 
-  Condition(:ShareTransitGateway, FnNot(FnEquals(Ref(:AccountList), '')))
+  Condition(:ShareTransitGateway, FnEquals(Ref(:EnableSharing), 'true'))
 
   RAM_ResourceShare(:ResourceShare) do
     Condition(:ShareTransitGateway)
