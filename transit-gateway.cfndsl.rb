@@ -25,8 +25,17 @@ CloudFormation do
     Tags tags unless tags.empty?
   end
 
+  Output(:TransitGateway) do
+    Value(Ref(:TransitGateway))
+    Export FnSub("${TransitGatewayName}-#{external_parameters[:component_name]}-TransitGateway")
+  end
+
   EC2_TransitGatewayRouteTable(:DefaultRouteTable) do
     TransitGatewayId Ref(:TransitGateway)
+  end
+  Output(:DefaultRouteTable) do
+    Value(Ref(:DefaultRouteTable))
+    Export FnSub("${TransitGatewayName}-#{external_parameters[:component_name]}-DefaultRouteTable")
   end
 
   Condition(:ShareTransitGateway, FnEquals(Ref(:EnableSharing), 'true'))
